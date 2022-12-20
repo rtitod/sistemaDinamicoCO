@@ -1,0 +1,28 @@
+MODULE main
+VAR
+	location: {l1,l2,l3,l4,l5};
+	lectura: 0 ..100;
+	fecha: 0 .. 9999;
+ASSIGN
+	init(location) := l1;
+	init(lectura) := 0;
+	init(fecha) := 1493;
+	next(location) := case
+		(location = l1) & (fecha<1493 | fecha>2900): l5;
+		(location = l1) & (lectura>=6): l5;
+		(location = l1) & (lectura<6): l2;
+		(location = l2) & (fecha>=1493 & fecha<=2900): l3;
+		(location = l2) & (fecha>2900): l4;
+		(location = l3) : l2;
+		(location = l4) : l1;
+		TRUE: location;
+		esac;
+	next(lectura) := case
+		(location = l4) : lectura+1;
+		TRUE: lectura;
+		esac;
+	next(fecha) := case
+		(location = l3) : fecha+1;
+		(location = l4) : 1493;
+		TRUE: fecha;
+		esac;
